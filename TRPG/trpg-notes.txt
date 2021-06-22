@@ -1,0 +1,27 @@
+TRPG:
+Room creator: 'nayu trpg' - create a room - invite friends to play - play the game - stops the game 
+Party Member: joins an invite trpg room from a room creator - play - stop
+Players: 2-10 for private, 9-50 for public
+
+there are 5 available local rooms, if 5 are used, then rooms cant be used.
+only host can end rooms
+
+Basic Status:
+HP: 100
+ATK: 24
+DEF: 2 (divides received attack point)
+BLOCK: 10% (meaning have a 10% chance to block attacks)
+CRIT: 15% +10 (meaning have a 15% chance to hit enemies by 24+10 attack point)
+MANA: 100 (energy needed to use giant/magic attacks)
+
+Gameplay Mechanics: Classic Mode (Kingdoms)
+Private:
+Every Person was a main player for the game. there are two sides of the character. Side A and Side B. 
+every side have these roles;
+-Shieldman: +2 DEF, +20 HP, +20% BLOCK
+-Assasins: +8 ATK, +10% CRIT, Stealth (can sneak and assasinate person in enemy's kingdom)
+-Spearman: +10% BLOCK, +1 DEF, Spearthrow (can throw spear to ranged enemies)
+-Magician: +50 MANA, +10% BLOCK, Fireballs (can shoot ranged enemies with Fireballs)
+-Swordsman: +12 ATK, +30% CRIT, +10% BLOCK
+-Medician: +50 HP, +2 DEF, Healing (Can heal friends and gives bonus medicine)
+-Bowman: +20 HP, +4 ATK, +15% CRIT

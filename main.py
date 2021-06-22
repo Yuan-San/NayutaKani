@@ -1,22 +1,48 @@
 import random
 import asyncio
-import account
+import replitdb
+from accfolder import account
+from TRPG import attributetrpg
 import discord
 import platform
 import os
 from discord.ext import commands
-from discord.ext.commands import Cog
 from alive import alive
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('nayu ', 'no u '), case_insensitive=True )
-bot.remove_command("help")
 
-class ExampleCog(Cog):
-    def __init__(self, bot):
-        self.bot = bot
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('nayu '), case_insensitive=True )
+bot.remove_command("help")
 
 
 #Test Playground
+@bot.command()
+async def trpg(ctx, mode: str = None):
+ embed=discord.Embed(title="Tabletop RPG - Click here to see Wiki", url="https://github.com/Yuan-San/tabletop-wiki/wiki", description="Play an RPG game with your friends! TRPG is a Multiplayer RPG game with Kingdom and Dungeon Themes with Many Modes and Things to do! Type `nayu trpg help` to Learn about TRPG. ", color=0x00ff00)
+ embed.add_field(name="Gamemodes:", value="Other TRPG gamemodes are under construction!", inline=False)
+ embed.add_field(name="1. Kingdom Mode", value="Kingdom Mode is a Mode based by MOBA Games themed with Kingdoms and Medieval Background. Found and Created by Nayuta Kani Team. Type `nayu trpg kingdom` to continue.", inline=True)
+ embed.add_field(name="2. Dungeon And Dragons Mode", value="Is a Classicly Old TRPG Mode with variety of fun and things to do. To Experience Classic TRPG, You can choose this mode. type `nayu trpg dnd` to continue.", inline=True)
+ if mode is None:
+  await ctx.send(embed=embed)
+ elif mode == "kingdom":
+  embed=discord.Embed(title="Kingdom TRPG Mode", description="Choose your option to play TRPG Kingdom Mode.", color=0x804040)
+  embed.add_field(name="Local Game:", value="-`nayu local create` To create a new room.\n -`nayu local quickmatch` to quickly join a room.\n -`nayu join [room code] {password}` to join a room manually.", inline=True)
+  embed.add_field(name="Online Game:", value="-`nayu online quickmatch` To quickly join a room that available.\n -`nayu join [room code] {password}` to join a room manually.", inline=True)
+  embed.add_field(name="Debug: ", value="-`nayu local rooms` To check available rooms.\n -`nayu online rooms` to check online available rooms.", inline=False)
+  embed.set_footer(text="Nayuta Kani Bot • Canary")
+  await ctx.send(embed=embed)
+
+
+@bot.command()
+async def local(ctx, method: str = None, password: int = None):
+  if method is None:
+    await ctx.send("Please include a method to play local. (Quickmatch, Create, Join.)")
+  elif method == "create":
+    if password is None:
+      await ctx.send(attributetrpg.kingdom_local_createroom(ctx.message.author.id, password))
+    elif password == str:
+      await ctx.send("For Password, please use numbers only.")
+    elif password == int:
+      await ctx.send(attributetrpg.kingdom_local_createroom(ctx.message.author.id, password))
 
 #End Playground
 
@@ -68,8 +94,7 @@ async def bank(ctx, regi: str = None):
             await asyncio.sleep(0.5)
             return
     elif regi.startswith("<@!"):
-        await ctx.send("That user is a bot and cannot have an account")
-        return
+      await ctx.send("That user is a bot and can't open balance.")
     elif regi.startswith("<@"):
         print(regi.strip("<@>"))
         if account.bal(regi.strip("<@>")) is None:
@@ -77,7 +102,7 @@ async def bank(ctx, regi: str = None):
                 "That user does not exist or has not registered a bank account."
             )
             return
-        else:
+    else:
             user = await bot.fetch_user(int(regi.strip("<@>")))
             embed = discord.Embed(title="Bank Account info:",
                                   colour=discord.Colour(0xf5a623),
@@ -412,6 +437,8 @@ async def donate(ctx):
   donateembed.add_field(name="How to claim Donator perks:", value="DM <@714207165350543403>, or the server owner to claim.", inline=False)
   donateembed.set_footer(text="Nayuta Kani Bot")
   await ctx.send(embed=donateembed)
+
+print(replitdb.keyprint)
 
 alive()
 bot.run(os.getenv('TOKEN'))
