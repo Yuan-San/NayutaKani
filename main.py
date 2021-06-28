@@ -1,6 +1,5 @@
 import random
 import asyncio
-import replitdb
 from accfolder import account
 from TRPG import attributetrpg
 import discord
@@ -51,7 +50,9 @@ async def local(ctx, method: str = None, password: int = None):
 async def bank(ctx, regi: str = None):
     if regi is None:
         if account.bal(ctx.message.author.id) is None:
-            await ctx.send("Please register first using `/bank register`")
+            embed=discord.Embed(title="❌ Account is not registered!", description="It seems like your Account is not Registered or Unreadable!", color=0x0000ff)
+            embed.add_field(name="Try this:", value="-Register your account by typing `nayu bank register`.\n-Try again later.\n-Report Bug if this problem still occurs.", inline=True)
+            await ctx.send(embed=embed)
             return
         else:
             embed = discord.Embed(title="Bank Account info:",
@@ -113,44 +114,13 @@ async def bank(ctx, regi: str = None):
             return
 
 
-@bot.command()
-async def bal(ctx, regi: str = None):
-    if regi is None:
-        if account.bal(ctx.message.author.id) is None:
-            await ctx.send("Please register first using `/bank register`")
-            return
-        else:
-            embed = discord.Embed(title="Bank Account info:",
-                                  colour=discord.Colour(0xf5a623),
-                                  description="Your balance is: `{}`".format(
-                                      account.bal(ctx.message.author.id)))
-            await ctx.send(embed=embed)
-            return
-    elif regi.startswith("<@!"):
-        await ctx.send("That user is a bot and cannot have an account")
-        return
-    elif regi.startswith("<@"):
-        print(regi.strip("<@>"))
-        if account.bal(regi.strip("<@>")) is None:
-            await ctx.send(
-                "That user does not exist or has not registered a bank account."
-            )
-            return
-        else:
-            user = await bot.fetch_user(int(regi.strip("<@>")))
-            embed = discord.Embed(title="Bank Account info:",
-                                  colour=discord.Colour(0xf5a623),
-                                  description="{}'s balance is: `{}`".format(
-                                      user.display_name,
-                                      account.bal(regi.strip("<@>"))))
-            await ctx.send(embed=embed)
-            return
-
-@bot.command()
+@bot.command(aliases=['bal', 'account', 'profile', 'me'])
 async def balance(ctx, regi: str = None):
     if regi is None:
         if account.bal(ctx.message.author.id) is None:
-            await ctx.send("Please register first using `/bank register`")
+            embed=discord.Embed(title="❌ Account is not registered!", description="It seems like your Account is not Registered or Unreadable!", color=0x008000)
+            embed.add_field(name="Try this:", value="-Register your account by typing `nayu bank register`.\n-Try again later.\n-Report Bug if this problem still occurs.", inline=True)
+            await ctx.send(embed=embed)
             return
         else:
             embed = discord.Embed(title="Bank Account info:",
@@ -371,20 +341,13 @@ async def messages(ctx):
         .format(counter, counter2, (counter * 100) // counter2))
 
 
-@bot.command()
+@bot.command(aliases=['start', 'h', 'cmds', 'commands', 'command'])
 async def help(ctx):
-    embed = discord.Embed(
-        title="Nayu Commands Panel",
-        colour=discord.Colour(0xef41),
-        description=
-        "Type **nayu {command}**. Make sure it's lowered case. \n\n<:rp:843871892090781776> **Game Commands:**\n- `rob [AMOUNT]` Bet an amount of Rp and try and steal some more\n- `srob` robs with 300 Rp\n- `daily` Receive Rp every 24 hours\n- `numgame` Starts a number guessing game\n- `roulette` If you win, you double your Rp\n- `work` Work for 1 hour and get some sweet amount of Rp !\n\n**Currency Commands:**\n- `top` Displays the users with the most amount of Rp!\n- `bank` Displays curent balance of bank account\n- `bank register` Registers a bank account\n- `bank [@USERNAME]` Check the balance of anyone that you @mention\n- `pay [@USERNAME] [AMOUNT]` Allows you to give money to users that you @mention\n\n**Utility Commands:**\n- `who` Says who you are\n- `count:` Lists the number of users registered\n- `messages` Lists the amount of messages you have sent\n- `definition [WORD]` Finds the meaning of the word supplied"
-    )
-    embed.set_footer(
-        text=
-        "oi itu yg ngarep dapat duit dari tiktok, udahlah, bikin kaya orang china aja anda. "
-    )
-    
-    await ctx.message.author.send(embed=embed)
+        embed=discord.Embed(title="❖ Start", description="Hi, {}! Nayuta Kani current prefix is `nayu`.".format (ctx.message.author.id), color=0x000080)
+        embed.add_field(name="Recommended:", value="-`bank register` Register your account to Nayuta Kani now! \n-`bank` Opens your Account Info.\n-`daily` Get your daily prize now!", inline=False)
+        embed.add_field(name="All Commands:", value="**Game Commands:**\n- `rob [amount]` Bet an amount of Rp and try and steal some more\n- `srob` robs with 300 Rp\n- `daily` Receive Rp every 24 hours\n- `numgame` Starts a number guessing game\n- `roulette` If you win, you double your Rp\n- `work` Work for 1 hour and get some sweet amount of Rp !\n\n**Currency Commands:**\n- `top` Displays the users with the most amount of Rp!\n- `bank` Displays curent balance of bank account\n- `bank register` Registers a bank account\n- `bank [@username]` Check the balance of anyone that you @mention\n- `pay [@username] [amount]` Allows you to give money to users that you @mention\n\n**Utility Commands:**\n- `who` Says who you are\n- `count:` Lists the number of users registered\n- `messages` Lists the amount of messages you have sent\n- `definition [word]` Finds the meaning of the word supplied", inline=False)
+        embed.set_footer(text="Nayuta Kani comes with a brand new help design!")
+        await ctx.send(embed=embed)
 
 
 #Moonlight Shop
@@ -437,8 +400,6 @@ async def donate(ctx):
   donateembed.add_field(name="How to claim Donator perks:", value="DM <@714207165350543403>, or the server owner to claim.", inline=False)
   donateembed.set_footer(text="Nayuta Kani Bot")
   await ctx.send(embed=donateembed)
-
-print(replitdb.keyprint)
 
 alive()
 bot.run(os.getenv('TOKEN'))
