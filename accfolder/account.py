@@ -24,14 +24,13 @@ def bump(name):
 
 def register(name):
     df = pd.read_csv('accounts.csv')
-
     if (df["UserId"] == int(name)).any():
-        return "You already registered :P"
+        return None
     else:
         with open('accounts.csv', 'a', newline='') as fd:
             fdw = csv.writer(fd)
             fdw.writerow([name, 0, 0, 0, 0, 0, 0, 0, 0])
-        return "Bank registered! Thanks for Registering! You got 1000Rp"
+        return "Registering your account..."
 
 
 def bal(name):

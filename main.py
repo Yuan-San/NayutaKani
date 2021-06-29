@@ -7,10 +7,14 @@ import platform
 import os
 from discord.ext import commands
 from alive import alive
+from datetime import datetime 
+from asyncio import sleep as aiosleep
 
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('nayu '), case_insensitive=True )
 bot.remove_command("help")
+
+utctime = datetime.utcnow()
 
 
 #Test Playground
@@ -62,38 +66,17 @@ async def bank(ctx, regi: str = None):
             await ctx.send(embed=embed)
             return
     elif regi == "register":
-      answer = None
-      embed=discord.Embed(title="Nayuta Kani Terms of Service", description="Read this first before continue registering! ", color=0x0000a0)
-      embed.add_field(name="1.", value="We are Following Discord Terms of Service and Moonlight's Bakery server's Rules, so these Rules are the most important thing to follow!", inline=False)
-      embed.add_field(name="2.", value="Nayuta Kani is a Currency game bot that uses Fake currency and not using Real currency (Such as USD, JYP, IDR, etc.). Nayuta Kani bot is using Rp as it's main currency.", inline=False)
-      embed.add_field(name="3.", value="Nayuta Kani is a free-to-use donationware bot. That means This bot is free but optionally you can donate to support the developer of this bot.", inline=False)
-      embed.add_field(name="4.", value="Donator get such special things like cooldown reduction, etc. But **don\'t Trust anyone who offers donator role except from our trusted Administrators.** We're keeping this bot environment safe from scammers. You can type `nayu donate` to see more.", inline=False)
-      embed.set_footer(text="Nayuta Kani Bot")
-      await ctx.send(embed=embed)
-      while answer not in ('y', 'n'):
-       await ctx.send(
-            'Type (y or n) to Continue Registering Your Account.'
+      if account.register(ctx.message.author.id) is None:
+          await ctx.send("Your Account is already Registered. Type `nayu start` for help.")
+      else:
+        fmt=discord.embed(title="⌘ Welcome", description="Welcome to Nayuta Kani, <@{}>. Type `nayu start` / `nayu help` to get Started.".format(ctx.message.author.id), color=0x000080)
+        fmr = await ctx.send(account.register(ctx.message.author.id))
+        await aiosleep(5)
+        await fmr.edit(
+          "Your Account Was Ready to Use."
         )
-
-       def check(m):
-           return m.author == ctx.message.author
-
-       try:
-            answer = (await bot.wait_for('message', timeout=50.0, check=check))
-       except asyncio.TimeoutError:
-          await ctx.send('Hey, why are you not responding?! :rage:')
-          return
-
-       answer = answer.content.lower()
-
-       if answer == 'y':
-            await ctx.send(account.register(ctx.message.author.id))
-       elif answer == 'n':
-            await ctx.send('That\'s ok, WIMP! :grin:')
-       else:
-            await ctx.send('Type "y" or "n", pleaseeee.:upside_down:')
-            await asyncio.sleep(0.5)
-            return
+        await ctx.send(embed=fmt)
+      return
     elif regi.startswith("<@!"):
       await ctx.send("That user is a bot and can't open balance.")
     elif regi.startswith("<@"):
@@ -123,7 +106,7 @@ async def balance(ctx, regi: str = None):
             await ctx.send(embed=embed)
             return
         else:
-            embed = discord.Embed(title="Bank Account info:",
+            embed = discord.Embed(title="Account info:",
                                   colour=discord.Colour(0xf5a623),
                                   description="Your balance is: `{}`".format(
                                       account.bal(ctx.message.author.id)))
@@ -208,7 +191,7 @@ async def where(ctx):
 @bot.command()
 async def numgame(ctx):
     if account.bal(ctx.message.author.id) is None:
-        await ctx.send("Please register first using `/bank register`")
+        await ctx.send("Please register first using `nayu bank register`")
         return
 
     await ctx.send('Guess a number between 1 to 100')
@@ -341,27 +324,24 @@ async def messages(ctx):
         .format(counter, counter2, (counter * 100) // counter2))
 
 
-@bot.command(aliases=['start', 'h', 'cmds', 'commands', 'command'])
+@bot.command(aliases=['h', 'cmds', 'commands', 'command', 'start'])
 async def help(ctx):
-        embed=discord.Embed(title="❖ Start", description="Hi, {}! Nayuta Kani current prefix is `nayu`.".format (ctx.message.author.id), color=0x000080)
-        embed.add_field(name="Recommended:", value="-`bank register` Register your account to Nayuta Kani now! \n-`bank` Opens your Account Info.\n-`daily` Get your daily prize now!", inline=False)
-        embed.add_field(name="All Commands:", value="**Game Commands:**\n- `rob [amount]` Bet an amount of Rp and try and steal some more\n- `srob` robs with 300 Rp\n- `daily` Receive Rp every 24 hours\n- `numgame` Starts a number guessing game\n- `roulette` If you win, you double your Rp\n- `work` Work for 1 hour and get some sweet amount of Rp !\n\n**Currency Commands:**\n- `top` Displays the users with the most amount of Rp!\n- `bank` Displays curent balance of bank account\n- `bank register` Registers a bank account\n- `bank [@username]` Check the balance of anyone that you @mention\n- `pay [@username] [amount]` Allows you to give money to users that you @mention\n\n**Utility Commands:**\n- `who` Says who you are\n- `count:` Lists the number of users registered\n- `messages` Lists the amount of messages you have sent\n- `definition [word]` Finds the meaning of the word supplied", inline=False)
-        embed.set_footer(text="Nayuta Kani comes with a brand new help design!")
-        await ctx.send(embed=embed)
+        embed=discord.Embed(title="⌘ Start", description="Welcome, <@{}>! Nayuta Kani current prefix is `nayu`.\n———————————————————".format (ctx.message.author.id), color=0x000080)
+        embed.add_field(name="◈ Recommended:", value="-`bank register` Register your account to Nayuta Kani now! \n-`bank` Opens your Account Info.\n-`daily` Get your daily prize now!\n", inline=False)
+        embed.add_field(name="◈ All Commands:", value="◇ **Game Commands:**\n- `rob [amount]` Bet an amount of Rp and try and steal some more\n- `srob` robs with 300 Rp\n- `daily` Receive Rp every 24 hours\n- `numgame` Starts a number guessing game\n- `roulette` If you win, you double your Rp\n- `work` Work for 1 hour and get some sweet amount of Rp !\n\n◇ **Currency Commands:**\n- `top` Displays the users with the most amount of Rp!\n- `bank` Displays curent balance of bank account\n- `bank register` Registers a bank account\n- `bank [@username]` Check the balance of anyone that you @mention\n- `pay [@username] [amount]` Allows you to give money to users that you @mention\n\n◇ **Utility Commands:**\n- `who` Says who you are\n- `count:` Lists the number of users registered\n- `messages` Lists the amount of messages you have sent\n- `definition [word]` Finds the meaning of the word supplied", inline=False)
+        embed.set_footer(text="UTC Time: {}, Prefix: 'nayu', Running v2021.06.04.2.".format(utctime))
+        await ctx.message.author.send(embed=embed)
 
 
 #Moonlight Shop
 @bot.command()
-async def shop(ctx, server: str=None):
-  if server is None:
-    await ctx.send('Wrong syntax! Type `nayu shop moonlight` to see Moonlight Bakery Server exclusive items!')
-  if server == "moonlight":
-    shopembed=discord.Embed(title="Moonlight's Bakery Official Shop", description="Buy some in-server items from this server! :)", color=0x800000)
-    shopembed.set_author(name="Click here to get the invite link • Owned by Akira", url="https://discord.gg/mZWkufa6Bq", icon_url="https://media.discordapp.net/attachments/831740920939937796/844050735061532672/ba91aad2a9563eba28a36666b1549be0.png")
+async def shop(ctx):
+    shopembed=discord.Embed(title="NayuShop: Moonlight Bakery", description="Showing Moonlight Bakery Items on sale: 2 Total.", color=0x800000)
+    shopembed.set_author(name="[Link] • Owned by Akira", url="https://discord.gg/mZWkufa6Bq", icon_url="https://media.discordapp.net/attachments/831740920939937796/844050735061532672/ba91aad2a9563eba28a36666b1549be0.png")
     shopembed.set_thumbnail(url="https://wallpaperaccess.com/full/5056828.jpg")
-    shopembed.add_field(name="1. <:cc:840533281069858827> Custom Movies • 3000Rp", value="Sets your own cinema in this server for 1 movie!", inline=False)
-    shopembed.add_field(name="2. <:privateroom:840533258475405320> Private Room Pass • 30000Rp • Limited Stock!", value="Your own House in this server? yes. Only you and person you invite will be able to see and chat in your channel", inline=True)
-    shopembed.set_footer(text="Nayuta Kani Bot • Type nayu buy [item number] to buy an item. Example: nayu buy 1")
+    shopembed.add_field(name="1.Custom Movies • 3000Rp", value="Sets your own cinema in this server for 1 movie!", inline=False)
+    shopembed.add_field(name="2. Private Room Pass • 30000Rp • Limited Stock!", value="Your own House in this server? yes. Only you and person you invite will be able to see and chat in your channel", inline=True)
+    shopembed.set_footer(text="NayuShop: Offline")
     await ctx.send(embed=shopembed)
 
 #Help
@@ -387,9 +367,15 @@ async def on_ready():
         f'https://discordapp.com/oauth2/authorize?client_id={bot.user.id}&scope=bot&permissions=8'
     )
     print('--------')
+    print('Status:')
+    print('Core: ONLINE')
+    print('Shop: OFFLINE')
+    print('TRPG: OFFLINE')
+    print('CSV, Replit: ONLINE')
+    print('--------')
 
     return await bot.change_presence(activity=discord.Game(
-        name='nayu help | Watching Imouto Sae Ireba Ii'))
+        name='⌘ Nayu Start'))
     
 @bot.command()
 async def donate(ctx):
