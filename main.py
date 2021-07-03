@@ -18,7 +18,25 @@ utctime = datetime.utcnow()
 
 
 #Test Playground
+@bot.command()
+async def die(ctx, *, message=None):
+ em = discord.Embed(color = 0xadcca6)
+ time_on_die = datetime.now()
 
+ if message == "pull":
+   if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
+          var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
+          await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes;*")
+   else:
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
+          await ctx.send(embed = em)
+ else:
+    if (os.system("sudo sh rAIOm.sh") / 256) > 1:
+          var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
+          await ctx.send("Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes;*")
+    else:
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
+          await ctx.send(embed = em)
 #End Playground
 
 #Bank
@@ -26,7 +44,7 @@ utctime = datetime.utcnow()
 async def bank(ctx, regi: str = None):
     if regi is None:
         if account.bal(ctx.message.author.id) is None:
-            embed=discord.Embed(title="❌ Account is not registered!", description="It seems like your Account is not Registered or Unreadable!", color=0x0000ff)
+            embed = discord.Embed(title="❌ Account is not registered!", description="It seems like your Account is not Registered or Unreadable!", color=0x0000ff)
             embed.add_field(name="Try this:", value="-Register your account by typing `nayu bank register`.\n-Try again later.\n-Report Bug if this problem still occurs.", inline=True)
             await ctx.send(embed=embed)
             return
@@ -38,16 +56,9 @@ async def bank(ctx, regi: str = None):
             await ctx.send(embed=embed)
             return
     elif regi == "register":
-      if account.register(ctx.message.author.id) is None:
-          await ctx.send("Your Account is already Registered. Type `nayu start` for help.")
-      else:
-        fmt=discord.embed(title="⌘ Welcome", description="Welcome to Nayuta Kani, <@{}>. Type `nayu start` / `nayu help` to get Started.".format(ctx.message.author.id), color=0x000080)
-        fmr = await ctx.send(account.register(ctx.message.author.id))
-        await aiosleep(5)
-        await fmr.edit(
-          "Your Account Was Ready to Use."
-        )
-        await ctx.send(embed=fmt)
+      await ctx.send(account.register(ctx.message.author.id))
+      fmt = discord.Embed(title="⌘ Welcome", description="Welcome to Nayuta Kani, <@{}>. Type `nayu start` / `nayu help` to get Started.".format(ctx.message.author.id), color=0x000080)
+      await ctx.message.author.send(embed=fmt)
       return
     elif regi.startswith("<@!"):
       await ctx.send("That user is a bot and can't open balance.")
