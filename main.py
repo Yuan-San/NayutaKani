@@ -25,17 +25,17 @@ async def die(ctx, *, message=None):
  time_on_die = datetime.now()
 
  if message == "pull":
-   if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
+        if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
           var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
-          await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes;*")
-   else:
+          await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
+        else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
           await ctx.send(embed = em)
  else:
-    if (os.system("sudo sh rAIOm.sh") / 256) > 1:
+        if (os.system("sudo sh rAIOm.sh") / 256) > 1:
           var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
-          await ctx.send("Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes;*")
-    else:
+          await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
+        else:
           em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
           await ctx.send(embed = em)
 #End Playground
