@@ -11,6 +11,7 @@ from datetime import datetime
 from asyncio import sleep as aiosleep
 
 
+
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('nayu '), case_insensitive=True )
 bot.remove_command("help")
 
@@ -19,34 +20,24 @@ utctime = datetime.utcnow()
 
 #Test Playground
 @bot.command()
-async def trpg(ctx, mode: str = None):
- embed=discord.Embed(title="Tabletop RPG - Click here to see Wiki", url="https://github.com/Yuan-San/tabletop-wiki/wiki", description="Play an RPG game with your friends! TRPG is a Multiplayer RPG game with Kingdom and Dungeon Themes with Many Modes and Things to do! Type `nayu trpg help` to Learn about TRPG. ", color=0x00ff00)
- embed.add_field(name="Gamemodes:", value="Other TRPG gamemodes are under construction!", inline=False)
- embed.add_field(name="1. Kingdom Mode", value="Kingdom Mode is a Mode based by MOBA Games themed with Kingdoms and Medieval Background. Found and Created by Nayuta Kani Team. Type `nayu trpg kingdom` to continue.", inline=True)
- embed.add_field(name="2. Dungeon And Dragons Mode", value="Is a Classicly Old TRPG Mode with variety of fun and things to do. To Experience Classic TRPG, You can choose this mode. type `nayu trpg dnd` to continue.", inline=True)
- if mode is None:
-  await ctx.send(embed=embed)
- elif mode == "kingdom":
-  embed=discord.Embed(title="Kingdom TRPG Mode", description="Choose your option to play TRPG Kingdom Mode.", color=0x804040)
-  embed.add_field(name="Local Game:", value="-`nayu local create` To create a new room.\n -`nayu local quickmatch` to quickly join a room.\n -`nayu join [room code] {password}` to join a room manually.", inline=True)
-  embed.add_field(name="Online Game:", value="-`nayu online quickmatch` To quickly join a room that available.\n -`nayu join [room code] {password}` to join a room manually.", inline=True)
-  embed.add_field(name="Debug: ", value="-`nayu local rooms` To check available rooms.\n -`nayu online rooms` to check online available rooms.", inline=False)
-  embed.set_footer(text="Nayuta Kani Bot • Canary")
-  await ctx.send(embed=embed)
+async def die(ctx, *, message=None):
+ em = discord.Embed(color = 0xadcca6)
+ time_on_die = datetime.now()
 
-
-@bot.command()
-async def local(ctx, method: str = None, password: int = None):
-  if method is None:
-    await ctx.send("Please include a method to play local. (Quickmatch, Create, Join.)")
-  elif method == "create":
-    if password is None:
-      await ctx.send(attributetrpg.kingdom_local_createroom(ctx.message.author.id, password))
-    elif password == str:
-      await ctx.send("For Password, please use numbers only.")
-    elif password == int:
-      await ctx.send(attributetrpg.kingdom_local_createroom(ctx.message.author.id, password))
-
+ if message == "pull":
+        if (os.system("sudo sh rAIOmp.sh") / 256) > 1:
+          var = os.system("sudo sh rAIOmp.sh") # this will run os.system() AGAIN.
+          await ctx.send(f"Couldn't run `rAIOmp.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
+        else:
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Updating Project Ax.."
+          await ctx.send(embed = em)
+ else:
+        if (os.system("sudo sh rAIOm.sh") / 256) > 1:
+          var = os.system("sudo sh rAIOm.sh") # this will run os.system() AGAIN.
+          await ctx.send(f"Couldn't run `rAIOm.sh`\n\n*os.system() output for BETA testing purposes; {var}*")
+        else:
+          em.description = f"**{ctx.author.name}#{ctx.author.discriminator}** Shutting Down.."
+          await ctx.send(embed = em)
 #End Playground
 
 #Bank
@@ -54,7 +45,7 @@ async def local(ctx, method: str = None, password: int = None):
 async def bank(ctx, regi: str = None):
     if regi is None:
         if account.bal(ctx.message.author.id) is None:
-            embed=discord.Embed(title="❌ Account is not registered!", description="It seems like your Account is not Registered or Unreadable!", color=0x0000ff)
+            embed = discord.Embed(title="❌ Account is not registered!", description="It seems like your Account is not Registered or Unreadable!", color=0x0000ff)
             embed.add_field(name="Try this:", value="-Register your account by typing `nayu bank register`.\n-Try again later.\n-Report Bug if this problem still occurs.", inline=True)
             await ctx.send(embed=embed)
             return
@@ -66,16 +57,9 @@ async def bank(ctx, regi: str = None):
             await ctx.send(embed=embed)
             return
     elif regi == "register":
-      if account.register(ctx.message.author.id) is None:
-          await ctx.send("Your Account is already Registered. Type `nayu start` for help.")
-      else:
-        fmt=discord.embed(title="⌘ Welcome", description="Welcome to Nayuta Kani, <@{}>. Type `nayu start` / `nayu help` to get Started.".format(ctx.message.author.id), color=0x000080)
-        fmr = await ctx.send(account.register(ctx.message.author.id))
-        await aiosleep(5)
-        await fmr.edit(
-          "Your Account Was Ready to Use."
-        )
-        await ctx.send(embed=fmt)
+      await ctx.send(account.register(ctx.message.author.id))
+      fmt = discord.Embed(title="⌘ Welcome", description="Welcome to Nayuta Kani, <@{}>. Type `nayu start` / `nayu help` to get Started.".format(ctx.message.author.id), color=0x000080)
+      await ctx.message.author.send(embed=fmt)
       return
     elif regi.startswith("<@!"):
       await ctx.send("That user is a bot and can't open balance.")

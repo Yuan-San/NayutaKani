@@ -25,7 +25,7 @@ def bump(name):
 def register(name):
     df = pd.read_csv('accounts.csv')
     if (df["UserId"] == int(name)).any():
-        return None
+        return "Your Account was Already Registered :x:."
     else:
         with open('accounts.csv', 'a', newline='') as fd:
             fdw = csv.writer(fd)
