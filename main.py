@@ -11,6 +11,7 @@ from datetime import datetime
 from asyncio import sleep as aiosleep
 
 
+
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('nayu '), case_insensitive=True )
 bot.remove_command("help")
 
