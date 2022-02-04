@@ -61,8 +61,6 @@ async def bank(ctx, regi: str = None):
       fmt = discord.Embed(title="⌘ Welcome", description="Welcome to Nayuta Kani, <@{}>. Type `nayu start` / `nayu help` to get Started.".format(ctx.message.author.id), color=0x000080)
       await ctx.message.author.send(embed=fmt)
       return
-    elif regi.startswith("<@!"):
-      await ctx.send("That user is a bot and can't open balance.")
     elif regi.startswith("<@"):
         print(regi.strip("<@>"))
         if account.bal(regi.strip("<@>")) is None:

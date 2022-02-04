@@ -1,2 +1,2 @@
 #!/bin/sh
-git stash;git pull;pm2 restart discordbot 1>/dev/null 2>&1
+git stash;git pull;pm2 restart main.py 1>/dev/null 2>&1
